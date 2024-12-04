@@ -69,7 +69,6 @@ where
                     warn!("Failed to deserialize existing data: {}", e);
                     T::default()
                 }
-                }
             },
             Err(e) => {
                 warn!("Failed to read file: {}", e);
@@ -182,10 +181,7 @@ where
             file_handler.get_path()
         );
         let mut file_handler = file_handler;
-            Ok(bytes) => if bytes.is_empty() {
-                T::default()
-            } else {
-                match serde_json::from_slice(&bytes) {
+        let config = match file_handler.read() {
             Ok(bytes) => match serde_json::from_slice(&bytes) {
                 Ok(config) => {
                     debug!("Successfully loaded existing config");
